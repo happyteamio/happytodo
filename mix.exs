@@ -7,6 +7,7 @@ defmodule HappyReview.Mixfile do
      elixir: "~> 1.4",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     aliases: aliases(),
      deps: deps()]
   end
 
@@ -17,6 +18,10 @@ defmodule HappyReview.Mixfile do
     # Specify extra applications you'll use from Erlang/Elixir
     [mod: {HappyReview.Application, []},
      extra_applications: [:logger]]
+  end
+
+  defp aliases do
+    ["test": ["ecto.create --quiet", "ecto.migrate", "test"]]
   end
 
   # Dependencies can be Hex packages:
@@ -30,6 +35,8 @@ defmodule HappyReview.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:cowboy, "~> 1.1"},
-     {:plug, "~> 1.3"}]
+     {:plug, "~> 1.3"},
+     {:ecto, "~> 2.1"},
+     {:postgrex, "~> 0.13.2"}]
   end
 end

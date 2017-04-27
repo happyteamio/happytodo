@@ -37,6 +37,7 @@ defmodule HappyReview.Mixfile do
     [{:cowboy, "~> 1.1"},
      {:plug, "~> 1.3"},
      {:ecto, "~> 2.1"},
-     {:postgrex, "~> 0.13.2"}]
+     {:postgrex, "~> 0.13.2"},
+     {:poison, "~> 3.1"}]
   end
 end

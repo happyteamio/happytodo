@@ -2,6 +2,8 @@ defmodule HappyReview.TeamValidator do
   import Plug.Conn
   alias HappyReview.{Repo, Team}
 
+  @behaviour Plug
+
   def init([]), do: []
 
   def call(conn, []) do

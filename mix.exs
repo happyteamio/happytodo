@@ -1,8 +1,8 @@
-defmodule HappyReview.Mixfile do
+defmodule HappyTodo.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :happy_review,
+    [app: :happy_todo,
      version: "0.1.0",
      elixir: "~> 1.4",
      build_embedded: Mix.env == :prod,
@@ -16,7 +16,7 @@ defmodule HappyReview.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
-    [mod: {HappyReview.Application, []},
+    [mod: {HappyTodo.Application, []},
      extra_applications: [:logger]]
   end
 

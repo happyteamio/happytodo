@@ -1,5 +1,5 @@
-defmodule HappyReview.TeamValidatorTest do
-  alias HappyReview.TeamValidator
+defmodule HappyTodo.TeamValidatorTest do
+  alias HappyTodo.TeamValidator
   use ExUnit.Case, async: true
   use Plug.Test
 
@@ -16,7 +16,7 @@ defmodule HappyReview.TeamValidatorTest do
   end
 
   setup do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(HappyReview.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(HappyTodo.Repo)
   end
 
   test "raises for unfetched body" do
@@ -61,7 +61,7 @@ defmodule HappyReview.TeamValidatorTest do
   defp call(conn), do: MyPlug.call(conn, [])
 
   defp insert_team(team_id) do
-    HappyReview.Repo.insert!(%HappyReview.Team{team_id: team_id, name: "test"})
+    HappyTodo.Repo.insert!(%HappyTodo.Team{team_id: team_id, name: "test"})
   end
 
   defp set_content_type(conn), do: put_req_header(conn, "content-type", "application/x-www-form-urlencoded")

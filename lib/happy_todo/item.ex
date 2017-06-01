@@ -1,4 +1,4 @@
-defmodule HappyReview.Item do
+defmodule HappyTodo.Item do
   use Ecto.Schema
 
   schema "item" do

@@ -1,4 +1,4 @@
-defmodule HappyReview.Repo.Migrations.CreateItem do
+defmodule HappyTodo.Repo.Migrations.CreateItem do
   use Ecto.Migration
 
   def change do

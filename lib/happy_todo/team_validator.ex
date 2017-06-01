@@ -1,6 +1,6 @@
-defmodule HappyReview.TeamValidator do
+defmodule HappyTodo.TeamValidator do
   import Plug.Conn
-  alias HappyReview.{Repo, Team}
+  alias HappyTodo.{Repo, Team}
 
   @behaviour Plug
 

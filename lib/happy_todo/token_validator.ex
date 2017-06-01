@@ -1,10 +1,10 @@
-defmodule HappyReview.TokenValidator do
+defmodule HappyTodo.TokenValidator do
   import Plug.Conn
 
   @behaviour Plug
 
   def init(opts) do
-    Keyword.get(opts, :token, Application.get_env(:happy_review, :token))
+    Keyword.get(opts, :token, Application.get_env(:happy_todo, :token))
   end
 
   def call(conn, token) do

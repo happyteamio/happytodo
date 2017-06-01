@@ -1,5 +1,5 @@
-defmodule HappyReview.TokenValidatorTest do
-  alias HappyReview.TokenValidator
+defmodule HappyTodo.TokenValidatorTest do
+  alias HappyTodo.TokenValidator
   use ExUnit.Case, async: true
   use Plug.Test
 

@@ -1,3 +1,7 @@
+# Ignore the env-specific configs
+config/dev.exs
+config/test.exs
+
 # The directory Mix will write compiled artifacts to.
 /_build
 

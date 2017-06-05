@@ -7,10 +7,10 @@ defmodule HappyTodo.TeamValidator do
   def init([]), do: []
 
   def call(conn, []) do
-    case conn.body_params do
-      %{"team_id" => team_id} -> validate_team(conn, team_id)
-      %Plug.Conn.Unfetched{} -> raise "Unfetched"
-      %{} -> conn |> send_resp(404, "") |> halt()
+    case conn.assigns[:request] do
+      %HappyTodo.Slack.Request{team_id: team_id} -> validate_team(conn, team_id)
+      nil -> raise "Invalid request"
+      _ -> conn |> send_resp(404, "") |> halt()
     end
   end
 

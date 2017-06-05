@@ -6,7 +6,6 @@ defmodule HappyTodo.TeamValidatorTest do
   defmodule MyPlug do
     use Plug.Builder
 
-    plug Plug.Parsers, parsers: [:urlencoded]
     plug TeamValidator
     plug :passthrough
 
@@ -19,25 +18,17 @@ defmodule HappyTodo.TeamValidatorTest do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(HappyTodo.Repo)
   end
 
-  test "raises for unfetched body" do
-    conn = conn(:post, "/") |> Map.put(:body_params, %Plug.Conn.Unfetched{aspect: :body_params})
+  test "raises for missing request struct" do
+    conn = conn(:post, "/")
 
-    assert_raise RuntimeError, "Unfetched", fn -> 
+    assert_raise RuntimeError, "Invalid request", fn -> 
       TeamValidator.call(conn, [])
     end
   end
 
-  test "returns 404 for no team parameter" do
-    conn = call(conn(:post, "/"))
-
-    assert conn.state == :sent
-    assert conn.status == 404
-    assert conn.halted
-  end
-
   test "returns 404 for nonexistent team" do
-    conn = conn(:post, "/", "team_id=T0BAD")
-      |> set_content_type()
+    conn = conn(:post, "/") 
+      |> assign(:request, %HappyTodo.Slack.Request{team_id: "T0BAD"})
       |> call()
 
     assert conn.state == :sent
@@ -48,8 +39,8 @@ defmodule HappyTodo.TeamValidatorTest do
   test "existing team" do
     team_id = "TTESTTEAM"
     insert_team(team_id)
-    conn = conn(:post, "/", "team_id=#{team_id}")
-      |> set_content_type()
+    conn = conn(:post, "/")
+      |> assign(:request, %HappyTodo.Slack.Request{team_id: team_id})
       |> call()
 
     assert conn.state == :sent
@@ -63,6 +54,4 @@ defmodule HappyTodo.TeamValidatorTest do
   defp insert_team(team_id) do
     HappyTodo.Repo.insert!(%HappyTodo.Team{team_id: team_id, name: "test"})
   end
-
-  defp set_content_type(conn), do: put_req_header(conn, "content-type", "application/x-www-form-urlencoded")
 end

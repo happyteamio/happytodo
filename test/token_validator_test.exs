@@ -8,7 +8,6 @@ defmodule HappyTodo.TokenValidatorTest do
 
     @token "gIkuvaNzQIHg97ATvDxqgjtO"
 
-    plug Plug.Parsers, parsers: [:urlencoded]
     plug TokenValidator, token: @token
     plug :passthrough
 
@@ -21,25 +20,16 @@ defmodule HappyTodo.TokenValidatorTest do
 
   defp call(conn), do: MyPlug.call(conn, [])
 
-  test "raises for unfetched body" do
-    conn = conn(:post, "/") |> Map.put(:body_params, %Plug.Conn.Unfetched{aspect: :body_params})
-
-    assert_raise RuntimeError, "Unfetched", fn -> 
+  test "raises for missing request struct" do
+    conn = conn(:post, "/") 
+    assert_raise RuntimeError, "Invalid request", fn -> 
       TokenValidator.call(conn, "")
     end
   end
 
-  test "returns 404 for no token" do
-    conn = call(conn(:post, "/"))
-
-    assert conn.state == :sent
-    assert conn.status == 404
-    assert conn.halted
-  end
-
   test "returns 404 for invalid token" do
-    conn = conn(:post, "/", "token=th15t0k3n15wr0ng")
-      |> set_content_type()
+    conn = conn(:post, "/") 
+      |> assign(:request, %HappyTodo.Slack.Request{token: "faketoken"})
       |> call()
 
     assert conn.state == :sent
@@ -48,8 +38,8 @@ defmodule HappyTodo.TokenValidatorTest do
   end
 
   test "valid token" do
-    conn = conn(:post, "/", "token=#{MyPlug.token()}")
-      |> set_content_type()
+    conn = conn(:post, "/") 
+      |> assign(:request, %HappyTodo.Slack.Request{token: MyPlug.token()})
       |> call()
 
     assert conn.state == :sent
@@ -57,6 +47,4 @@ defmodule HappyTodo.TokenValidatorTest do
     assert conn.resp_body == "Passthrough"
     refute conn.halted
   end
-
-  defp set_content_type(conn), do: put_req_header(conn, "content-type", "application/x-www-form-urlencoded")
 end

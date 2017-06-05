@@ -31,6 +31,7 @@ defmodule HappyTodo.ParserTest do
       |> call()
     
     assert conn.assigns[:request] == expected
+    refute conn.halted
   end
 
   test "returns 404 for incomplete request" do

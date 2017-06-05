@@ -8,10 +8,10 @@ defmodule HappyTodo.TokenValidator do
   end
 
   def call(conn, token) do
-    case conn.body_params do
-      %{"token" => ^token} -> conn
-      %Plug.Conn.Unfetched{} -> raise "Unfetched"
-      %{} -> conn |> send_resp(404, "") |> halt()
+    case conn.assigns[:request] do
+      %HappyTodo.Slack.Request{token: ^token} -> conn
+      nil -> raise "Invalid request"
+      _ -> conn |> send_resp(404, "") |> halt()
     end
   end
 end

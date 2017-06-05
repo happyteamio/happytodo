@@ -5,6 +5,7 @@ defmodule HappyTodo do
 
   plug Plug.Logger
   plug Plug.Parsers, parsers: [:urlencoded, :multipart]
+  plug HappyTodo.Parser
   plug HappyTodo.TokenValidator
   plug HappyTodo.TeamValidator
   plug :process

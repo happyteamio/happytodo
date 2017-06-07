@@ -49,6 +49,19 @@ defmodule HappyTodo.TeamValidatorTest do
     refute conn.halted
   end
 
+  test "updates the request with the fetched team" do
+    team = %HappyTodo.Team{team_id: "myteam", name: "My Team"}
+    HappyTodo.Repo.insert!(team)
+
+    conn = conn(:post, "/")
+      |> assign(:request, %HappyTodo.Slack.Request{team_id: team.team_id})
+      |> call()
+
+    keys = [:team_id, :name]
+    fetched_team = conn.assigns[:request].team
+    assert Map.take(team, keys) == Map.take(fetched_team, keys)
+  end
+
   defp call(conn), do: MyPlug.call(conn, [])
 
   defp insert_team(team_id) do

@@ -3,5 +3,5 @@ defmodule HappyTodo.Slack.Request do
   Slack request structure
   """
 
-  defstruct [:token, :team_id, :command, :text]
+  defstruct [:token, :team_id, :command, :text, :team]
 end

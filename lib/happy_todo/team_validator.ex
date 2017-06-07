@@ -24,5 +24,7 @@ defmodule HappyTodo.TeamValidator do
   defp process_team(conn, nil) do
     conn |> send_resp(404, "") |> halt()
   end
-  defp process_team(conn, _team), do: conn
+  defp process_team(conn, team) do
+    assign(conn, :request, %{ conn.assigns[:request] | team: team })
+  end
 end

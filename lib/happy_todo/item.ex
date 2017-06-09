@@ -4,6 +4,7 @@ defmodule HappyTodo.Item do
   schema "item" do
     field :value, :string
     belongs_to :team, HappyTodo.Team
+    timestamps [updated_at: false]
   end
 end
 

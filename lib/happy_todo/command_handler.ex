@@ -38,7 +38,11 @@ defmodule HappyTodo.CommandHandler do
                      select: i.value,
                      order_by: i.inserted_at
 
-    response = items |> Enum.with_index(1) |> Enum.map_join("\n", fn({item, index}) -> "#{index}. #{item}" end)
+    response = case length(items) do
+      0 -> "no items"
+      _ -> items |> Enum.with_index(1) |> Enum.map_join("\n", fn({item, index}) -> "#{index}. #{item}" end)
+    end
+
     {:private, response}
   end
 end

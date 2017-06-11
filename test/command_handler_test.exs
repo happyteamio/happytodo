@@ -30,6 +30,7 @@ defmodule HappyTodo.CommandHandlerTest do
 
   test "prevents adding empty item", %{team: team} = _context do
     request = %Request{team: team, text: "   \n  "}
+
     result = add(request)
     new_item = get_single_item()
 
@@ -39,6 +40,7 @@ defmodule HappyTodo.CommandHandlerTest do
 
   test "prevents adding an existing item", %{team: team} = _context do
     add(%Request{team: team, text: "new item"})
+
     result = add(%Request{team: team, text: "new item"})
     items_count = Repo.aggregate(Item, :count, :id)
 
@@ -46,7 +48,32 @@ defmodule HappyTodo.CommandHandlerTest do
     assert items_count == 1
   end
 
+  test "lists when no items", %{team: team} = _context do
+    insert_another_team_data()
+
+    result = list(%Request{team: team})
+
+    assert result == {:private, "no items"}
+  end
+
+
+  test "lists team's items", %{team: team} = _context do
+    insert_another_team_data()
+    add(%Request{team: team, text: "new item1"})
+    add(%Request{team: team, text: "new item2"})
+
+    result = list(%Request{team: team})
+
+    assert result == {:private, "1. new item1\n2. new item2"}
+  end
+
   defp get_single_item do
     Item |> preload(:team) |> Repo.one
+  end
+
+  defp insert_another_team_data do
+    team = Repo.insert!(%HappyTodo.Team{team_id: "ANOTHERTEAM1", name: "another team"})
+    add(%Request{team: team, text: "new item1"})
+    add(%Request{team: team, text: "new item2"})
   end
 end

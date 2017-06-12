@@ -31,7 +31,40 @@ defmodule HappyTodo.CommandHandler do
     end
   end
 
-  def pick(_, _), do: nil
+  def pick(request) do
+    with {:ok, value} <- pick_validate_item(String.trim(request.text || "")),
+         {:ok, item} <- pick_fetch_item(request.team, value),
+         :ok <- pick_remove_item(item) do
+      formatted_item = if String.length(item.value) > 100 do
+        "#{String.slice(item.value, 0..99)}(...)"
+      else
+        item.value
+      end
+
+      {:public, ~s(@#{request.user_name} picked "#{formatted_item}")}
+    else
+      {:error, message} -> {:private, message}
+    end
+  end
+
+  defp pick_validate_item(""), do: {:error, "cannot pick empty item"}
+  defp pick_validate_item(item), do: {:ok, item}
+
+  defp pick_fetch_item(team, item_text) do
+    items = Item.by_team(team) |> Item.containing_value(item_text) |> limit(2)
+    case Repo.all(items) do
+      [] -> {:error, ~s(item "#{item_text}" does not exist)}
+      [item] -> {:ok, item}
+      _ -> {:error, ~s(ambiguous results for "#{item_text}")}
+    end
+  end
+
+  defp pick_remove_item(item) do
+    case Repo.delete(item) do
+      {:ok, _item} -> :ok
+      {:error, _changeset} -> {:error, "db error"}
+    end
+  end
 
   def list(request) do
     items = Repo.all from i in Item.by_team(request.team),

@@ -12,6 +12,11 @@ defmodule HappyTodo.Item do
     Ecto.assoc(team, :items)
   end
 
+  def containing_value(query, value) do
+    pattern = "%#{value}%"
+    from i in query, where: ilike(i.value, ^pattern)
+  end
+
   def with_value(query, value) do
     from i in query, where: ilike(i.value, ^value)
   end

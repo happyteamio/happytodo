@@ -1,6 +1,10 @@
 # HappyTodo
 
-**TODO: Add description**
+Slack TODO app built on [plugs](https://github.com/elixir-lang/plug/).
+Supports the following commands:
+* `/add text` - adds a new todo item
+* `/list` - lists the items
+* `/pick text` - removes the item containing `text` from the list 
 
 ## Installation
 

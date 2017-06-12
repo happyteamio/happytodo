@@ -23,7 +23,7 @@ defmodule HappyTodo.ParserTest do
   end
 
   test "parses request" do
-    expected = %HappyTodo.Slack.Request{token: "MY_TOKEN", team_id: "Team123", command: "list", text: "please do"}
+    expected = %HappyTodo.Slack.Request{token: "MY_TOKEN", team_id: "Team123", user_name: "isaac", command: "list", text: "please do"}
     encoded = Plug.Conn.Query.encode(expected |> Map.from_struct |> Map.update!(:command, &("/" <> &1)))
 
     conn = conn(:post, "/", encoded)

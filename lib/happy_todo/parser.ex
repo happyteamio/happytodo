@@ -9,9 +9,10 @@ defmodule HappyTodo.Parser do
       %{
         "token" => token,
         "team_id" => team_id,
+        "user_name" => user_name,
         "command" => "/" <> command,
         "text" => text
-      } -> conn |> assign(:request, %HappyTodo.Slack.Request{token: token, team_id: team_id, command: command, text: text})
+      } -> conn |> assign(:request, %HappyTodo.Slack.Request{token: token, team_id: team_id, user_name: user_name, command: command, text: text})
       %Plug.Conn.Unfetched{} -> raise "Unfetched"
       %{} -> conn |> send_resp(404, "") |> halt()
     end

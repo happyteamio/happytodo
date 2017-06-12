@@ -28,8 +28,8 @@ defmodule HappyTodo.Router do
   end
 
   defp reply(conn, response) do
-    response_struct = HappyTodo.Slack.Response.public(response)
-    json = response_struct |> to_slack_response() |> Poison.encode!
+    response_struct = to_slack_response(response)
+    json = response_struct |> Poison.encode!
     conn
     |> put_resp_content_type("application/json")
     |> send_resp(200, json)

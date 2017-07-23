@@ -38,6 +38,7 @@ defmodule HappyTodo.Mixfile do
      {:plug, "~> 1.3"},
      {:ecto, "~> 2.1"},
      {:postgrex, "~> 0.13.2"},
-     {:poison, "~> 3.1"}]
+     {:poison, "~> 3.1"},
+     {:distillery, "~> 1.4"}]
   end
 end
